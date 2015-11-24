@@ -602,7 +602,3 @@
 0.0 2.5E11 20000.0 0.0 2.0E10 pluto.png
 0.0 -2.5E11 -20000.0 0.0 2.0E10 pluto.png
 
-Creator of the Universe:  Erik Keselica
-COS 126 Precept P07A, Spring 2007
-
-Less complex flower with dt = 50000.0.

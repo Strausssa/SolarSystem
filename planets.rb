@@ -1,56 +1,47 @@
 class Planets
-	G = 6.67408e-11
-	attr_accessor :x, :y, :xscaled, :yscaled, :xvel, :yvel,:mass,:total_force, :name, :acceleration, :xforce, :yforce, :xacceleration, :yaccel
-	def initialize(x,y,xvel,yvel,mass,img,radius)
-		@img = Gosu::Image.new("images/#{img}")
+	attr_accessor :x, :y, :xvel, :yvel, :xscal, :yscal, :weight,:force, :name, :acceleration, :xforce, :yforce, :xacceleration, :yacceleration
+	def initialize(x, y, xvel, yvel, weight, image, r)
+		@image = Gosu::Image.new("images/#{image}")
 		@x = x
 		@y = y
-		@xscaled = 0
-		@yscaled = 0
+ 		@xscaled = @yscaled = @force = @xforce = @yforce = @xacceleration = @yacceleration = 0.0
+		@name = image
 		@xvel = xvel
 		@yvel = yvel
-		@mass = mass
-		@radius = radius
-		@total_force = 0.0
-		@xforce= 0.0
-		@yforce = 0.0
-		@xacceleration = 0.0
-		@yaccel = 0.0
-		@name = img
+		@weight = weight
+		@r = r
 	end
 	
 	def draw
-		@img.draw(@xscaled - @img.width / 2.0, @yscaled - @img.height / 2.0 ,1)
+		@image.draw(@xscal-@image.width/1.0, @yscal-@image.height/1.0,1)
 	end
 
-	 def total_force(planet)
-		xdist = @x- planet.x
-	 	ydist = @y - planet.y
-	 	dist = Math.sqrt((xdist**2) + (ydist**2))
-	 	@total_force = ((G*@mass*planet.mass)/(dist**2))
-	 	@xforce -= (@total_force * xdist) / dist
-		@yforce -= (@total_force * ydist) /dist
-		
+	def force(plan)
+		dist = Math.sqrt(((@x - plan.x)**2) + ((@y - plan.y)**2))
+    @force = ((Gravity * @weight * plan.weight) / (dist**2))
+
+	 	@xforce -= (@force * (@x - plan.x)) / dist
+    @yforce -= (@force * (@y - plan.y)) / dist
 	end
 
-	def acceleration
-	 	 @xacceleration =  (@xforce / @mass)
-	 	 @yaccel = (@yforce / @mass)
+	def speed
+	 	@xvel = (@xvel + 15000 * @xacceleration)
+		@yvel = (@yvel + 15000 * @yacceleration)
+	 end
+
+	def acceleration 
+	 	 @xacceleration =  (@xforce / @weight)
+	 	 @yacceleration = (@yforce / @weight)
 	 	 @xforce = 0
 	 	 @yforce = 0
 	 end
 
-	 def velocity
-	 	 @xvel = (@xvel + 10000 * @xacceleration)
-		 @yvel = (@yvel + 10000* @yaccel)
-	 end
-
-	def position
-	 	 @x +=  @xvel* 10000
-	 	 @y += @yvel * 10000
-	 	@xscaled =(@x /(@radius *2)) +375
-		@yscaled =(-@y/(@radius*2)) +375
+	def location
+	 	@x += @xvel * 15000
+	 	@y += @yvel * 15000
+	 	@xscal = (@x / (@r * 2)) + 375
+		@yscal = (-@y / (@r * 2)) + 375
 	end
 
-
+	Gravity = 6.67408e-11
 end
